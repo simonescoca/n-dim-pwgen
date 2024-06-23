@@ -1,5 +1,6 @@
 const matrixGen = require("../functions/matrix-gen");
 const input = require("../utils/input");
+const checkInput = require("../functions/check-input");
 const fs = require("fs");
 
 
@@ -11,12 +12,13 @@ if(!fs.existsSync(outDir)) fs.mkdirSync(outDir);
     const outputFile = outDir + "/n_dim_pwd.txt";
 
     let dims = await input("> inserisci le dimensioni del matrix : ");
-    const n_dimPw = matrixGen(dims);
-
-    const matrixString = stringify(n_dimPw);
-
-    // Scrivi la stringa JSON nel file
-    fs.writeFileSync(outputFile, matrixString, { flag: "w" });
-
-    console.log(`> trovi la tua password multidimensionale in ${outputFile}`);
+    if(!checkInput(dims)) {
+        console.log("> le dimensioni devono essere in formato d1xd2xd3... con dn intero e maggiore di 0");
+    } else {
+        
+        const n_dimPw = matrixGen(dims);
+        const matrixString = stringify(n_dimPw);
+        fs.writeFileSync(outputFile, matrixString, { flag: "w" });
+        console.log(`> trovi la tua password multidimensionale in ${outputFile}`);
+    }
 })();
